@@ -1,0 +1,20 @@
+version: "3"
+services:
+  kuma:
+    image: louislam/uptime-kuma:1.17.1-alpine
+    container_name: kuma_server
+    restart: always
+    volumes:
+      - "/data/kuma/app/data:/app/data"
+  reverse:
+    container_name: reverse
+    hostname: reverse
+    image: nginx:stable-alpine 
+    links:
+      - kuma:kuma
+    ports:
+      - 443:443
+    volumes:
+      - kuma/ssl:/etc/ssl/private
+      - kuma/nginx:/etc/nginx
+
